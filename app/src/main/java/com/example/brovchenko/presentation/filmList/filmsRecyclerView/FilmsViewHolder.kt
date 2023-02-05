@@ -1,4 +1,4 @@
-package com.example.brovchenko.presentation.filmsRecyclerView
+package com.example.brovchenko.presentation.filmList.filmsRecyclerView
 
 import androidx.recyclerview.widget.RecyclerView
 import com.example.brovchenko.databinding.FilmItemBinding
