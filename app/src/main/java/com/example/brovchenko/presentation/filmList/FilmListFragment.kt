@@ -1,15 +1,20 @@
 package com.example.brovchenko.presentation.filmList
 
+import android.content.Context
+import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.brovchenko.R
 import com.example.brovchenko.databinding.FragmentFilmListBinding
 import com.example.brovchenko.presentation.FilmDetailFragment
+import com.example.brovchenko.presentation.MainActivity
 import com.example.brovchenko.presentation.filmList.filmsRecyclerView.FilmsAdapter
 
 
@@ -26,6 +31,8 @@ class FilmListFragment : Fragment() {
             this
         )[FilmListViewModel::class.java]
     }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +56,9 @@ class FilmListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         //viewModel.getTopPopularFilms()
+        requireActivity().requestedOrientation
+
+
         viewModel.topPopularFilms.observe(viewLifecycleOwner) {
             filmsAdapter.submitList(it)
         }
@@ -82,4 +92,6 @@ class FilmListFragment : Fragment() {
             .replace(R.id.main_container, fragment)
             .addToBackStack(null).commit()
     }
+
+
 }
