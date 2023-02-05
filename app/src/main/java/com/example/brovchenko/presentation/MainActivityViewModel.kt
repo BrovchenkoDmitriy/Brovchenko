@@ -14,9 +14,9 @@ class MainActivityViewModel : ViewModel() {
 
     // ВьюМодель создана для тестов запросов в сеть
 
-    private val repository = RepositoryImpl()
-    private val getTopPopularFilmsUseCase = GetTopPopularFilmsUseCase(repository)
-    private val getFilmUseCase = GetFilmUseCase(repository)
+   // private val repository = RepositoryImpl()
+   // private val getTopPopularFilmsUseCase = GetTopPopularFilmsUseCase(repository)
+    //private val getFilmUseCase = GetFilmUseCase(repository)
 
 
     private val _topPopularFilms = MutableLiveData<List<Film>>()
@@ -28,17 +28,17 @@ class MainActivityViewModel : ViewModel() {
         get() = _filmDetail
 
 
-    fun getTopPopularFilms() {
-        viewModelScope.launch {
-            _topPopularFilms.value = getTopPopularFilmsUseCase.getTopPopularFilms()
-           // Log.d("TAGIL",_topPopularFilms.value.toString())
-        }
-    }
+//    fun getTopPopularFilms() {
+//        viewModelScope.launch {
+//            _topPopularFilms.value = getTopPopularFilmsUseCase.getTopPopularFilms()
+//           // Log.d("TAGIL",_topPopularFilms.value.toString())
+//        }
+//    }
 
-    fun getFilmDetail(filmId:Int){
-        viewModelScope.launch {
-            _filmDetail.value = getFilmUseCase.getFilm(filmId)
-         //   Log.d("TAGIL", _filmDetail.value.toString())
-        }
-    }
+//    fun getFilmDetail(filmId:Int){
+//        viewModelScope.launch {
+//            _filmDetail.value = getFilmUseCase.getFilm(filmId)
+//         //   Log.d("TAGIL", _filmDetail.value.toString())
+//        }
+//    }
 }

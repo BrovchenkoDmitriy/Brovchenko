@@ -22,20 +22,20 @@ class MainActivity : AppCompatActivity() {
 
         // все ниже для теста запросов в сеть
 
-        val text = findViewById<TextView>(R.id.textText)
-        viewModel.getTopPopularFilms()
-        viewModel.getFilmDetail(1405508)
-
-        viewModel.filmDetail.observe(this) {
-            testText2 = it.toString()
-            text.text = it.toString()
-            Log.d("TAGIL", testText2)
-        }
-
-        viewModel.topPopularFilms.observe(this) {
-            testText = it
-            //  text.text = it.toString()
-            Log.d("TAGIL", testText.size.toString())
-        }
+       // val text = findViewById<TextView>(R.id.textText)
+//        viewModel.getTopPopularFilms()
+//        viewModel.getFilmDetail(1405508)
+//
+//        viewModel.filmDetail.observe(this) {
+//            testText2 = it.toString()
+//            text.text = it.toString()
+//            Log.d("TAGIL", testText2)
+//        }
+//
+//        viewModel.topPopularFilms.observe(this) {
+//            testText = it
+//            //  text.text = it.toString()
+//            Log.d("TAGIL", testText.size.toString())
+//        }
     }
 }
