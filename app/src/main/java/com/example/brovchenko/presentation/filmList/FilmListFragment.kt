@@ -1,4 +1,4 @@
-package com.example.brovchenko.presentation
+package com.example.brovchenko.presentation.filmList
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,8 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.brovchenko.R
 import com.example.brovchenko.databinding.FragmentFilmListBinding
-import com.example.brovchenko.presentation.filmsRecyclerView.FilmsAdapter
+import com.example.brovchenko.presentation.FilmDetailFragment
+import com.example.brovchenko.presentation.filmList.filmsRecyclerView.FilmsAdapter
 
 
 class FilmListFragment : Fragment() {
@@ -33,9 +35,8 @@ class FilmListFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentFilmListBinding.inflate(layoutInflater, container, false)
-        // Inflate the layout for this fragment
         return binding.root
     }
 
@@ -47,7 +48,7 @@ class FilmListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
-        viewModel.getTopPopularFilms()
+        //viewModel.getTopPopularFilms()
         viewModel.topPopularFilms.observe(viewLifecycleOwner) {
             filmsAdapter.submitList(it)
         }
@@ -59,9 +60,26 @@ class FilmListFragment : Fragment() {
             filmsAdapter = FilmsAdapter()
             adapter = filmsAdapter
         }
+        setupClickListener()
+        setupLongClickListener()
     }
 
-    companion object {
+    private fun setupClickListener() {
+        filmsAdapter.onPositionItemClickListener = {
+            launchFilmDetailFragment(FilmDetailFragment.newInstanceEditItem(it.filmId))
 
+        }
+    }
+
+    private fun setupLongClickListener() {
+        filmsAdapter.onPositionItemLongClickListener = {
+            viewModel.upgradeFilmItem(it)
+        }
+    }
+
+    private fun launchFilmDetailFragment(fragment: Fragment) {
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.main_container, fragment)
+            .addToBackStack(null).commit()
     }
 }

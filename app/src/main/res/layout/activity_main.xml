@@ -6,5 +6,5 @@
     android:id = "@+id/main_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:name="com.example.brovchenko.presentation.FilmListFragment"
+    android:name="com.example.brovchenko.presentation.filmList.FilmListFragment"
     tools:context=".presentation.MainActivity"/>

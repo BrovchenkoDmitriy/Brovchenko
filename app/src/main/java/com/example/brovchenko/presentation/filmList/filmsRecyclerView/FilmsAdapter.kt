@@ -1,7 +1,8 @@
-package com.example.brovchenko.presentation.filmsRecyclerView
+package com.example.brovchenko.presentation.filmList.filmsRecyclerView
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.net.toUri
@@ -13,6 +14,9 @@ import com.example.brovchenko.domain.Film
 
 class FilmsAdapter :
     ListAdapter<Film, FilmsViewHolder>(FilmsDiffCallBack()) {
+
+    var onPositionItemLongClickListener: ((Film) -> Unit)? = null
+    var onPositionItemClickListener: ((Film) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilmsViewHolder {
         Log.d("TAG", "onCreateViewHolder")
@@ -38,9 +42,21 @@ class FilmsAdapter :
         val film = getItem(position)
         val poster = film.posterUrlPreview
         with(viewHolder.binding){
+            if (film.chosen){
+                ivChosenStatus.visibility = View.VISIBLE
+            } else {
+                ivChosenStatus.visibility = View.INVISIBLE
+            }
             tvFilmItemName.text = film.nameRu
             tvFilmItemYear.text = film.year
             bindImage(ivFilmItemPoster,poster)
+        }
+        viewHolder.binding.root.setOnLongClickListener {
+            onPositionItemLongClickListener?.invoke(film)
+            true
+        }
+        viewHolder.binding.root.setOnClickListener {
+            onPositionItemClickListener?.invoke(film)
         }
 
     }
