@@ -10,7 +10,7 @@ data class TopPopularFilmDto (
 
 data class FilmPreviewDto (
     val filmId: Int = 0,
-    val nameRu: String? = "",
+    val nameRu: String?= "",
     val nameEn: String? = "",
     val year: String? = "",
     val countries: List<Country> = listOf(),

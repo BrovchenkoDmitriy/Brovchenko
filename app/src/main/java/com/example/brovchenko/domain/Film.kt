@@ -1,7 +1,7 @@
 package com.example.brovchenko.domain
 
 data class Film(
-    val id:Int = 0,
+    //val id:Int ,
     val filmId: Int,
     val nameRu: String,
     val nameEn: String,

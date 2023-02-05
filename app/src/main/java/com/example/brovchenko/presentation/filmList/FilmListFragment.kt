@@ -1,20 +1,16 @@
 package com.example.brovchenko.presentation.filmList
 
-import android.content.Context
-import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.brovchenko.R
 import com.example.brovchenko.databinding.FragmentFilmListBinding
 import com.example.brovchenko.presentation.FilmDetailFragment
-import com.example.brovchenko.presentation.MainActivity
 import com.example.brovchenko.presentation.filmList.filmsRecyclerView.FilmsAdapter
 
 
@@ -33,17 +29,17 @@ class FilmListFragment : Fragment() {
     }
 
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentFilmListBinding.inflate(layoutInflater, container, false)
+        val orientation = resources.configuration.orientation
+        if (orientation== Configuration.ORIENTATION_LANDSCAPE){
+            requireActivity().supportFragmentManager.popBackStack()
+        }else{
+            requireActivity().supportFragmentManager.popBackStack()
+        }
         return binding.root
     }
 
@@ -55,12 +51,36 @@ class FilmListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
-        //viewModel.getTopPopularFilms()
-        requireActivity().requestedOrientation
+        viewModel.topPopularFilms.observe(viewLifecycleOwner){
+           if(it.isEmpty()){
+               binding.tvStatus.text = "Ошибка загрузки"
+           }
+        }
 
 
-        viewModel.topPopularFilms.observe(viewLifecycleOwner) {
+        viewModel.isChosenList.observe(viewLifecycleOwner){
+            if(it){
+                binding.topPopularButton.isEnabled = true
+                binding.chosenButton.isEnabled = false
+            }else {
+                binding.topPopularButton.isEnabled = false
+                binding.chosenButton.isEnabled = true
+            }
+        }
+
+
+        viewModel.currentFilms.observe(viewLifecycleOwner) {
             filmsAdapter.submitList(it)
+        }
+        binding.topPopularButton.setOnClickListener {
+            viewModel.getTopPopularFilms()
+            binding.topPopularButton.isEnabled = false
+            binding.chosenButton.isEnabled = true
+        }
+        binding.chosenButton.setOnClickListener {
+            viewModel.getChosenFilms()
+            binding.topPopularButton.isEnabled = true
+            binding.chosenButton.isEnabled = false
         }
     }
 
@@ -76,8 +96,14 @@ class FilmListFragment : Fragment() {
 
     private fun setupClickListener() {
         filmsAdapter.onPositionItemClickListener = {
-            launchFilmDetailFragment(FilmDetailFragment.newInstanceEditItem(it.filmId))
-
+            val orientation = resources.configuration.orientation
+            if (orientation== Configuration.ORIENTATION_PORTRAIT){
+                requireActivity().supportFragmentManager.popBackStack()
+                launchFilmDetailFragment(FilmDetailFragment.newInstanceEditItem(it.filmId))
+            } else{
+                requireActivity().supportFragmentManager.popBackStack()
+                launchFilmDetailFragmentLandScape(FilmDetailFragment.newInstanceEditItem(it.filmId))
+            }
         }
     }
 
@@ -90,6 +116,11 @@ class FilmListFragment : Fragment() {
     private fun launchFilmDetailFragment(fragment: Fragment) {
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.main_container, fragment)
+            .addToBackStack(null).commit()
+    }
+    private fun launchFilmDetailFragmentLandScape(fragment: Fragment){
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.second_container, fragment)
             .addToBackStack(null).commit()
     }
 

@@ -8,17 +8,23 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.brovchenko.data.RepositoryImpl
 import com.example.brovchenko.domain.Film
-import com.example.brovchenko.domain.useCases.GetTopPopularFilmsUseCase
-import com.example.brovchenko.domain.useCases.LoadDataUseCase
-import com.example.brovchenko.domain.useCases.UpgradeFilmItemUseCase
+import com.example.brovchenko.domain.useCases.*
 import kotlinx.coroutines.launch
+
 
 class FilmListViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository = RepositoryImpl(application)
     private val getTopPopularFilmsUseCase = GetTopPopularFilmsUseCase(repository)
-    private val upgradeFilmItemUseCase = UpgradeFilmItemUseCase(repository)
+    private val upgradeFilmItemUseCase = UpgradeFilmUseCase(repository)
     private val loadDataUseCase = LoadDataUseCase(repository)
+    private val getChosenFilmsUseCase = GetChosenFilmsUseCase(repository)
+    private val getFilmUseCase = GetFilmUseCase(repository)
+
+
+    private val _isChosenList = MutableLiveData<Boolean>()
+    val isChosenList: LiveData<Boolean>
+        get() = _isChosenList
 
     private val _topPopularFilms = MutableLiveData<List<Film>>()
     val topPopularFilms: LiveData<List<Film>>
@@ -28,22 +34,58 @@ class FilmListViewModel(application: Application) : AndroidViewModel(application
     val chosenFilms: LiveData<List<Film>>
         get() = _chosenFilms
 
-    init{
-        getTopPopularFilms()
+    private val _currentFilms = MutableLiveData<List<Film>>()
+    val currentFilms: LiveData<List<Film>>
+        get() = _currentFilms
+
+    init {
+        loadData()
+        Log.d("TAGIL","init{} FilmListViewModel")
     }
 
-    private fun getTopPopularFilms() {
+    private fun loadData() {
         viewModelScope.launch {
-            loadDataUseCase()
+                loadDataUseCase()
             _topPopularFilms.value = getTopPopularFilmsUseCase.getTopPopularFilms()
+            _currentFilms.value = topPopularFilms.value
+            _isChosenList.value = false
+
+        }
+    }
+
+    fun getTopPopularFilms() {
+        Log.d("TAGIL","getTopPopularFilms FilmListViewModel")
+        viewModelScope.launch {
+            _topPopularFilms.value = getTopPopularFilmsUseCase.getTopPopularFilms()
+            _currentFilms.value = topPopularFilms.value
+            _isChosenList.value = false
+        }
+    }
+
+    fun getChosenFilms() {
+        Log.d("TAGIL","getChosenFilms FilmListViewModel")
+        viewModelScope.launch {
+            _chosenFilms.value = getChosenFilmsUseCase.getChosenFilms()
+            _currentFilms.value = chosenFilms.value
+            _isChosenList.value = true
         }
     }
 
     fun upgradeFilmItem(film: Film) {
+        Log.d("TAGIL","upgradeFilmItem FilmListViewModel")
         viewModelScope.launch {
+
+            Log.d("TAGIL", film.toString())
             val newFilm = film.copy(chosen = !film.chosen)
-            upgradeFilmItemUseCase.upgradeFilmItem(newFilm)
-            _topPopularFilms.value = getTopPopularFilmsUseCase.getTopPopularFilms()
+            Log.d("TAGIL", newFilm.toString())
+            upgradeFilmItemUseCase.upgradeFilm(newFilm)
+
+            if(isChosenList.value == true){
+                _currentFilms.value = getChosenFilmsUseCase.getChosenFilms()
+            } else{
+                _currentFilms.value = getTopPopularFilmsUseCase.getTopPopularFilms()
+            }
+
         }
 
     }
