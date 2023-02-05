@@ -1,11 +1,13 @@
 package com.example.brovchenko.data
 
+import android.app.Application
 import com.example.brovchenko.data.database.FilmDbModel
 import com.example.brovchenko.data.network.ServiceApi
 import com.example.brovchenko.domain.Repository
 import com.example.brovchenko.domain.Film
 
-class RepositoryImpl:Repository {
+class RepositoryImpl(application: Application):Repository {
+
     private val mapper = Mapper()
 
     override suspend fun getTopPopularFilms(): List<Film> {

@@ -10,5 +10,5 @@ data class Film(
     val description: String,
     val countries: List<String>,
     val genres: List<String>,
-    val chosen: Boolean
+    var chosen: Boolean
 )

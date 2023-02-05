@@ -15,5 +15,5 @@ data class FilmDbModel(
     val description: String = "",
     val countries: String,
     val genres:String,
-    val chosen: Boolean = false
+    var chosen: Boolean = false
 )
