@@ -1,7 +1,7 @@
 package com.example.brovchenko.domain
 
 interface Repository {
-    suspend fun getTopPopularFilms():List<FilmPreview>
-    suspend fun getChosenFilms():List<FilmPreview>
-    suspend fun getFilm(filmId:Int):FilmDetail
+    suspend fun getTopPopularFilms():List<Film>
+    suspend fun getChosenFilms():List<Film>
+    suspend fun getFilm(filmId:Int): Film
 }

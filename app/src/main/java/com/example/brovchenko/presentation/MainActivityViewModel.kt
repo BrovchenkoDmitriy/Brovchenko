@@ -5,8 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.brovchenko.data.RepositoryImpl
-import com.example.brovchenko.domain.FilmDetail
-import com.example.brovchenko.domain.FilmPreview
+import com.example.brovchenko.domain.Film
 import com.example.brovchenko.domain.useCases.GetFilmUseCase
 import com.example.brovchenko.domain.useCases.GetTopPopularFilmsUseCase
 import kotlinx.coroutines.launch
@@ -20,12 +19,12 @@ class MainActivityViewModel : ViewModel() {
     private val getFilmUseCase = GetFilmUseCase(repository)
 
 
-    private val _topPopularFilms = MutableLiveData<List<FilmPreview>>()
-    val topPopularFilms: LiveData<List<FilmPreview>>
+    private val _topPopularFilms = MutableLiveData<List<Film>>()
+    val topPopularFilms: LiveData<List<Film>>
         get() = _topPopularFilms
 
-    private val _filmDetail = MutableLiveData<FilmDetail>()
-    val filmDetail: LiveData<FilmDetail>
+    private val _filmDetail = MutableLiveData<Film>()
+    val filmDetail: LiveData<Film>
         get() = _filmDetail
 
 
