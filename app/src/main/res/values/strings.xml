@@ -2,4 +2,7 @@
     <string name="app_name">Brovchenko</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="top_popular_text">Популярные</string>
+    <string name="chosen_text">Избранное</string>
 </resources>

@@ -1,5 +1,7 @@
 package com.example.brovchenko.data
 
+import android.util.Log
+import com.example.brovchenko.data.database.ChosenFilmDbModel
 import com.example.brovchenko.data.database.FilmDbModel
 import com.example.brovchenko.data.network.Country
 import com.example.brovchenko.data.network.FilmPreviewDto
@@ -13,8 +15,8 @@ class Mapper {
 
     fun mapFilmPreviewDtoToFilmDbModel(filmPreviewDto: FilmPreviewDto): FilmDbModel {
         return FilmDbModel(
-            id = 0,
-            filmId = filmPreviewDto.filmId,
+          //  id = 0,
+            filmId = filmPreviewDto.filmId?:0,
             nameRu = filmPreviewDto.nameRu ?: "",
             nameEn = filmPreviewDto.nameEn ?: "",
             posterUrl = filmPreviewDto.posterUrl ?: "",
@@ -34,19 +36,19 @@ class Mapper {
     // FilmDbModel to Film
 
     fun mapFilmDbModelToFilm(filmDbModel: FilmDbModel): Film {
-        return Film(
-            id = filmDbModel.id,
-            filmId = filmDbModel.filmId,
-            nameRu = filmDbModel.nameRu,
-            nameEn = filmDbModel.nameEn,
-            posterUrl = filmDbModel.posterUrl,
-            posterUrlPreview = filmDbModel.posterUrlPreview,
-            year = filmDbModel.year,
-            description = filmDbModel.description,
-            countries = mapStringToList(filmDbModel.countries),
-            genres = mapStringToList(filmDbModel.genres),
-            chosen = filmDbModel.chosen
-        )
+       return Film(
+               // id = filmDbModel.id,
+                filmId = filmDbModel.filmId,
+                nameRu = filmDbModel.nameRu,
+                nameEn = filmDbModel.nameEn,
+                posterUrl = filmDbModel.posterUrl,
+                posterUrlPreview = filmDbModel.posterUrlPreview,
+                year = filmDbModel.year,
+                description = filmDbModel.description?:"no description",
+                countries = mapStringToList(filmDbModel.countries),
+                genres = mapStringToList(filmDbModel.genres),
+                chosen = filmDbModel.chosen
+            )
     }
 
     fun mapFilmDbModelListToFilmList(list: List<FilmDbModel>) =
@@ -59,7 +61,7 @@ class Mapper {
 
     fun mapFilmToFilmDbModel(film: Film): FilmDbModel {
         return FilmDbModel(
-            id = film.id,
+          //  id = film.id,
             filmId = film.filmId,
             nameRu = film.nameRu,
             nameEn = film.nameEn,
@@ -76,6 +78,54 @@ class Mapper {
     fun mapFilmListToFilmDbModelList(list: List<Film>) =
         list.map {
             mapFilmToFilmDbModel(it)
+        }
+
+
+    // ChosenFilmDbModel to Film
+
+    fun mapChosenFilmDbModelToFilm(filmDbModel: ChosenFilmDbModel): Film {
+        return Film(
+           // id = filmDbModel.id,
+            filmId = filmDbModel.filmId,
+            nameRu = filmDbModel.nameRu,
+            nameEn = filmDbModel.nameEn,
+            posterUrl = filmDbModel.posterUrl,
+            posterUrlPreview = filmDbModel.posterUrlPreview,
+            year = filmDbModel.year,
+            description = filmDbModel.description?:"no description",
+            countries = mapStringToList(filmDbModel.countries),
+            genres = mapStringToList(filmDbModel.genres),
+            chosen = filmDbModel.chosen
+        )
+    }
+
+    fun mapChosenFilmDbModelListToFilmList(list: List<ChosenFilmDbModel>) =
+        list.map {
+            mapChosenFilmDbModelToFilm(it)
+        }
+
+
+    //  mapFilmToFilmDbModel
+
+    fun mapFilmToChosenFilmDbModel(film: Film): ChosenFilmDbModel {
+        return ChosenFilmDbModel(
+         //   id = film.id,
+            filmId = film.filmId,
+            nameRu = film.nameRu,
+            nameEn = film.nameEn,
+            posterUrl = film.posterUrl,
+            posterUrlPreview = film.posterUrlPreview,
+            year = film.year,
+            description = film.description,
+            countries = mapListToString(film.countries),
+            genres = mapListToString(film.genres),
+            chosen = film.chosen
+        )
+    }
+
+    fun mapFilmListToChosenFilmDbModelList(list: List<Film>) =
+        list.map {
+            mapFilmToChosenFilmDbModel(it)
         }
 
     /////////////////////////////////////////////////////////////////
